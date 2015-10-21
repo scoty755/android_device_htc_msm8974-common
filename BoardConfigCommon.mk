@@ -83,9 +83,6 @@ MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 
-# Libc extensions
-BOARD_PROVIDES_ADDITIONAL_BIONIC_STATIC_LIBS += libc_htc_symbols
-
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
@@ -140,6 +137,7 @@ BOARD_SEPOLICY_DIRS += device/htc/msm8974-common/sepolicy
 BOARD_HARDWARE_CLASS := \
     hardware/cyanogen/cmhw \
     $(LOCAL_PATH)/cmhw
+TARGET_TAP_TO_WAKE_NODE := "/sys/devices/virtual/htc_sensorhub/sensor_hub/tap2wake"
 
 # Inherit from the proprietary version
 -include vendor/htc/msm8974-common/BoardConfigVendor.mk
