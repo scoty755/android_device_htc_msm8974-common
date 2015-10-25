@@ -50,3 +50,22 @@ service felica_agent /system/bin/felica_agent
     oneshot
 # Felica -
 
+ # felica device file nodes
+ /dev/felica            0660   felicaclient   felicaclient
+ /dev/felica_pon        0660   felicaclient   felicaclient
+ /dev/felica_cen        0660   felicalock     felicaclient
+ /dev/felica_rfs        0440   felicaclient   felicaclient
+ /dev/felica_rws        0660   felicarwsapp   felicaclient
+ /dev/felica_int        0440   felicaclient   felicaclient
+ /dev/felica_int_poll   0400   felicaclient   felicaclient
+ /dev/felica_uid        0220   felicaclient   felicaclient
+ 
+ # snfc device file nodes
+ /dev/ttyHSL5           0660   nfc   nfc
+ /dev/snfc_pon          0660   nfc   nfc
+ /dev/snfc_cen          0660   nfc   nfc
+ /dev/snfc_rfs          0660   nfc   nfc
+ /dev/snfc_intu         0660   nfc   nfc
+ /dev/snfc_intu_polling 0660   nfc   nfc
+ /dev/snfc_auto_polling 0660   nfc   nfc
+ /dev/snfc_hsel         0660   nfc   nfc
