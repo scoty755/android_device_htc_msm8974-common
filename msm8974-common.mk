@@ -41,6 +41,7 @@ PRODUCT_PACKAGES += Dotcase
 PRODUCT_PACKAGES += \
     fstab.qcom \
     init.qcom.rc \
+    init.qcom.power.rc \
     init.qcom.usb.rc \
     ueventd.qcom.rc
 
@@ -97,10 +98,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_platform_info.xml:system/etc/audio_platform_info.xml \
     $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml
-
-# Camera
-PRODUCT_PACKAGES += \
-    camera.msm8974
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
