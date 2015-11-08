@@ -46,10 +46,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     media.aac_51_output_enabled=true \
     mm.enable.smoothstreaming=true
 
-# MTP
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
-
 # NFC
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.nfc.fw_download=true \
@@ -72,7 +68,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true \
     persist.thermal.monitor=true \
     ro.qc.sdk.sensors.gestures=true \
-    ro.vendor.extension_library=/vendor/lib/libqc-opt.so \
     ro.qualcomm.perf.cores_online=2
 
 # RIL
