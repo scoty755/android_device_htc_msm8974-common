@@ -43,6 +43,9 @@ TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := krait
 
 # Kernel
+ifneq ($(TARGET_DEVICE),b2wlj)
+BOARD_DTBTOOL_ARGS := --dt-tag "htc,project-id = <"
+endif
 BOARD_KERNEL_CMDLINE := console=none androidboot.hardware=qcom user_debug=31 ehci-hcd.park=3 zcache
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
