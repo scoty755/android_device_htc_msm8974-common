@@ -47,7 +47,7 @@ on init
     symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
 
-# HTC SSD Battery - BEGIN
+    # HTC SSD Battery - BEGIN
     chown system system /sys/class/power_supply/battery/full_level_dis_batt_chg
     chmod 0220 /sys/class/power_supply/battery/full_level_dis_batt_chg
     chown radio radio /sys/class/power_supply/battery/phone_call
@@ -58,18 +58,22 @@ on init
     chmod 0220 /sys/class/power_supply/battery/navigation
     chown system system /sys/class/power_supply/battery/disable_limit_chg
     chmod 0220 /sys/class/power_supply/battery/disable_limit_chg
-# HTC SSD Battery - END
+    # HTC SSD Battery - END
 
     # permissions for NFC
     chown nfc nfc /sys/class/NFC_sensor/comn/nxp_uicc_swp
     chmod 0664 /sys/class/NFC_sensor/comn/nxp_uicc_swp
 
-# Vibrator permission
+    # Vibrator permission
     chown system /sys/devices/virtual/timed_output/vibrator/voltage_level
     restorecon /sys/devices/virtual/timed_output/vibrator/voltage_level
 
-# Quick Charge 2.0 daemon
+    # Quick Charge 2.0 daemon
     setprop persist.usb.hvdcp.detect "true"
+
+    # Gestures
+    chown system system /sys/class/htc_sensorhub/sensor_hub/gesture_motion
+    chmod 0664 /sys/class/htc_sensorhub/sensor_hub/gesture_motion
 
 on fs
     mkdir /devlog 0700 root root
@@ -277,12 +281,6 @@ service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     user root
     oneshot
 
-service cir_fw_update /system/bin/cir_fw_update -u cir.img
-    class main
-    user root
-    group root
-    oneshot
-
 service dhcpcd_bnep0 /system/bin/dhcpcd -BKLG
     disabled
     oneshot
@@ -401,9 +399,9 @@ service map1_del /system/bin/sdptool del 0x1ff17
     oneshot
 
 service mpdecision /system/bin/mpdecision --avg_comp
-    class core
+    class late_start
     user root
-    disabled
+    group system
 
 service netmgrd /system/bin/netmgrd
     class core
@@ -457,7 +455,7 @@ service time_daemon /system/bin/time_daemon
    group root
 
 service wcnss-service /system/bin/wcnss_service
-    class main
+    class late_start
     user system
     group system wifi qcom_diag radio
     oneshot
@@ -497,14 +495,6 @@ on property:bluetooth.sap.status=running
 
 on property:bluetooth.sap.status=stopped
     stop bt-sap
-
-on property:crypto.driver.load=1
-     insmod /system/lib/modules/qce.ko
-     insmod /system/lib/modules/qcedev.ko
-
-on property:crypto.driver.load=0
-     exec /system/bin/rmmod qcedev.ko
-     exec /system/bin/rmmod qce.ko
 
 on property:init.svc.bootanim=stopped
     # Overwrite ActivityManager's low memory killer settings
