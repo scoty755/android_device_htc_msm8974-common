@@ -101,13 +101,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml
 
-# Filesystem management tools
+# HTC logging symbols
 PRODUCT_PACKAGES += \
-    make_ext4fs
-
-# HTC symbols
-PRODUCT_PACKAGES += \
-    libhtc_symbols
+    libshim_log
 
 # GPS
 PRODUCT_COPY_FILES += \
@@ -178,7 +174,6 @@ PRODUCT_PACKAGES += \
 # OMX
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
-    libdashplayer \
     libdivxdrmdecrypt \
     libextmedia_jni \
     libOmxAacEnc \
@@ -187,15 +182,9 @@ PRODUCT_PACKAGES += \
     libOmxEvrcEnc \
     libOmxQcelp13Enc \
     libOmxVdec \
-    libOmxVdecHevc \
     libOmxVenc \
     libOmxVidcCommon \
-    libqcmediaplayer \
-    libstagefrighthw \
-    qcmediaplayer
-
-PRODUCT_BOOT_JARS += \
-    qcmediaplayer
+    libstagefrighthw
 
 # Power
 PRODUCT_PACKAGES += \
@@ -211,10 +200,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/thermanager.xml:system/etc/thermanager.xml
-
-# USB
-PRODUCT_PACKAGES += \
-    com.android.future.usb.accessory
 
 # Wifi firmware
 PRODUCT_PACKAGES += \
