@@ -1,5 +1,5 @@
 #
-# Copyright 2014 The CyanogenMod Project
+# Copyright (C) 2014 The CyanogenMod Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,9 +17,15 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE       := hostapd_default.conf
-LOCAL_MODULE_TAGS  := optional
-LOCAL_MODULE_CLASS := ETC
-LOCAL_SRC_FILES    := $(LOCAL_MODULE)
-LOCAL_MODULE_PATH  := $(TARGET_OUT_ETC)/hostapd
-include $(BUILD_PREBUILT)
+
+LOCAL_SRC_FILES := wcnss_htc_client.c
+
+LOCAL_C_INCLUDES += hardware/qcom/wlan/wcnss_service
+LOCAL_CFLAGS += -Wall
+
+LOCAL_SHARED_LIBRARIES := libc libcutils libutils liblog
+
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := libwcnss_qmi
+
+include $(BUILD_SHARED_LIBRARY)
