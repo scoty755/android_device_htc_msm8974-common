@@ -3,6 +3,7 @@
 ifeq ($(BOARD_PROVIDES_LIBRIL),true)
 ifeq ($(TARGET_BOARD_PLATFORM),msm8974)
 ifeq ($(BOARD_VENDOR),htc)
+ifeq ($(TARGET_DEVICE),b2wlj)
 
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
@@ -48,6 +49,7 @@ LOCAL_COPY_HEADERS := ril_ex.h
 
 include $(BUILD_SHARED_LIBRARY)
 
+endif # TARGET_DEVICE
 endif # BOARD_VENDOR
 endif # TARGET_BOARD_PLATFORM
 endif # BOARD_PROVIDES_LIBRIL
