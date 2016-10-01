@@ -49,8 +49,7 @@ PRODUCT_PACKAGES += \
 
 # Qcom init scripts for /etc
 PRODUCT_PACKAGES += \
-   init.qcom.bt.sh \
-   init.qcom.ril.sh
+   init.qcom.bt.sh
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -211,7 +210,6 @@ PRODUCT_COPY_FILES += \
 
 # WiFi
 PRODUCT_PACKAGES += \
-    dhcpcd.conf \
     hostapd \
     libwcnss_qmi \
     libwpa_client \
