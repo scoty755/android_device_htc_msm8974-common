@@ -72,6 +72,9 @@ BLUETOOTH_HCI_USE_MCT := true
 # Boot animation
 TARGET_BOOTANIMATION_HALF_RES := true
 
+# Camera
+TARGET_HAS_LEGACY_CAMERA_HAL1 := true
+
 # Charge mode
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/htc_lpm/lpm_mode
 
@@ -98,6 +101,9 @@ BOARD_PROVIDES_LIBRIL := true
 
 # RPC
 TARGET_NO_RPC := true
+
+# SDClang
+TARGET_USE_SDCLANG := true
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
