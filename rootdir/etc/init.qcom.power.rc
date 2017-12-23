@@ -1,16 +1,9 @@
 on early-init
-    write /sys/module/msm_thermal/core_control/enabled 0
-
-    write /sys/devices/system/cpu/cpu1/online 1
-    write /sys/devices/system/cpu/cpu2/online 1
-    write /sys/devices/system/cpu/cpu3/online 1
-
-    write /sys/module/msm_thermal/core_control/enabled 1
+    write /sys/block/mmcblk0/queue/scheduler "noop"
+    write /sys/block/mmcblk0/bdi/read_ahead_kb 512
+    write /sys/block/mmcblk1/bdi/read_ahead_kb 512
 
 on enable-low-power
-    write /sys/devices/system/cpu/cpu1/online 1
-    write /sys/devices/system/cpu/cpu2/online 1
-    write /sys/devices/system/cpu/cpu3/online 1
     write /sys/module/lpm_resources/enable_low_power/l2 4
     write /sys/module/msm_pm/modes/cpu0/power_collapse/suspend_enabled 1
     write /sys/module/msm_pm/modes/cpu1/power_collapse/suspend_enabled 1
@@ -33,6 +26,12 @@ on enable-low-power
     write /sys/module/msm_pm/modes/cpu2/retention/idle_enabled 1
     write /sys/module/msm_pm/modes/cpu3/retention/idle_enabled 1
 
+    write /sys/module/msm_thermal/core_control/enabled 0
+
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu2/online 1
+    write /sys/devices/system/cpu/cpu3/online 1
+
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "interactive"
     write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor "interactive"
@@ -50,21 +49,20 @@ on enable-low-power
     write /sys/devices/system/cpu/cpufreq/interactive/sync_freq 1036800
     write /sys/devices/system/cpu/cpufreq/interactive/up_threshold_any_cpu_freq 1190400
 
-    write /sys/module/cpubw_krait/parameters/enable 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 300000
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 300000
     write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 300000
     write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 300000
     chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-    chown root.system /sys/devices/system/cpu/mfreq
-    chmod 220 /sys/devices/system/cpu/mfreq
     chown root.system /sys/devices/system/cpu/cpu1/online
     chown root.system /sys/devices/system/cpu/cpu2/online
     chown root.system /sys/devices/system/cpu/cpu3/online
     chmod 664 /sys/devices/system/cpu/cpu1/online
     chmod 664 /sys/devices/system/cpu/cpu2/online
     chmod 664 /sys/devices/system/cpu/cpu3/online
+
+    write /sys/module/msm_thermal/core_control/enabled 1
 
     write /sys/class/devfreq/qcom,cpubw.42/governor "cpubw_hwmon"
     write /sys/class/kgsl/kgsl-3d0/devfreq/governor "msm-adreno-tz"
@@ -73,14 +71,16 @@ on enable-low-power
     write /sys/module/cpu_boost/parameters/input_boost_freq 1497600
     write /sys/module/cpu_boost/parameters/input_boost_ms 40
 
-    write /dev/cpuctl/notify_on_migrate "1"
-
-    setprop ro.qualcomm.perf.cores_online 2
-
-    rm /data/system/default_values
+    write /dev/cpuctl/notify_on_migrate 1
 
 on boot
     trigger enable-low-power
 
 on property:init.svc.recovery=running
     trigger enable-low-power
+
+on property:dev.bootcomplete=1
+    rm /data/system/perfd/default_values
+    setprop ro.qualcomm.perf.cores_online 2
+    setprop sys.io.scheduler "bfq"
+    start mpdecision

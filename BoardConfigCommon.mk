@@ -1,5 +1,6 @@
 #
-# Copyright (C) 2015 The CyanogenMod Project
+# Copyright (C) 2015-2016 The CyanogenMod Project
+#               2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@
 # definition file).
 #
 
-LOCAL_PATH := device/htc/msm8974-common
+PLATFORM_PATH := device/htc/msm8974-common
 
 BOARD_VENDOR := htc
 
@@ -33,7 +34,6 @@ TARGET_NO_BOOTLOADER := true
 # Platform
 TARGET_BOARD_PLATFORM := msm8974
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno330
-TARGET_NEEDS_GCC_LIBC := true
 
 # Architecture
 TARGET_ARCH := arm
@@ -54,6 +54,9 @@ TARGET_KERNEL_SOURCE := kernel/htc/msm8974
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 
+# ANT+
+BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
+
 # Audio
 BOARD_USES_ALSA_AUDIO := true
 AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := false
@@ -64,9 +67,7 @@ AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
 USE_CUSTOM_AUDIO_POLICY := 1
 
 # Bluetooth
-BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
-BLUETOOTH_HCI_USE_MCT := true
 
 # Boot animation
 TARGET_BOOTANIMATION_HALF_RES := true
@@ -76,6 +77,11 @@ TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 
 # Charge mode
 BOARD_CHARGING_MODE_BOOTING_LPM := /sys/htc_lpm/lpm_mode
+
+# CMHW
+BOARD_HARDWARE_CLASS += \
+    hardware/cyanogen/cmhw \
+    $(PLATFORM_PATH)/cmhw
 
 # FM Radio
 AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
@@ -88,6 +94,7 @@ USE_OPENGL_RENDERER := true
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
 
 # Lights
@@ -97,11 +104,7 @@ TARGET_PROVIDES_LIBLIGHT := true
 TARGET_POWERHAL_VARIANT := qcom
 
 # RIL
-BOARD_PROVIDES_LIBRIL := true
-BOARD_PROVIDES_RILD := true
-
-# RPC
-TARGET_NO_RPC := true
+TARGET_RIL_VARIANT := caf
 
 # SDClang
 TARGET_USE_SDCLANG := true
@@ -119,7 +122,6 @@ BOARD_HOSTAPD_DRIVER := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 TARGET_PROVIDES_WCNSS_QMI := true
 TARGET_USES_QCOM_WCNSS_QMI := true
-TARGET_USES_WCNSS_CTRL := true
 WIFI_DRIVER_FW_PATH_STA := "sta"
 WIFI_DRIVER_FW_PATH_AP := "ap"
 
@@ -134,12 +136,6 @@ TARGET_USERIMAGES_USE_F2FS := true
 
 # Recovery
 BOARD_GLOBAL_CFLAGS := -DBOARD_RECOVERY_BLDRMSG_OFFSET=2048
-BOARD_HAS_LARGE_FILESYSTEM := true
-BOARD_HAS_NO_SELECT_BUTTON := true
-BOARD_USES_MMCUTILS := true
-TARGET_RECOVERY_DEVICE_DIRS += device/htc/msm8974-common
+TARGET_RECOVERY_DEVICE_DIRS += $(PLATFORM_PATH)
 TARGET_RECOVERY_DEVICE_MODULES += chargeled
-TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/rootdir/etc/fstab.qcom
-
-# Hardware
-BOARD_HARDWARE_CLASS += hardware/cyanogen/cmhw
+TARGET_RECOVERY_FSTAB := $(PLATFORM_PATH)/rootdir/etc/fstab.qcom

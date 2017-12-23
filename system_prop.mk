@@ -20,7 +20,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
-    qcom.bluetooth.soc=smd
+    qcom.bluetooth.soc=smd \
+    ro.bluetooth.dun=true \
+    ro.bluetooth.hfp.ver=1.6 \
+    ro.bluetooth.sap=true \
+    ro.qualcomm.bt.hci_transport=smd
 
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -47,10 +51,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Input
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.input.noresample=1
-
-# IO Scheduler
-PRODUCT_PROPERTY_OVERRIDES += \
-    sys.io.scheduler=bfq
 
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -93,6 +93,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.jbims=1 \
     DEVICE_PROVISIONED=1
+
+# Storage
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.sys.sdcardfs=true
 
 # Wifi
 PRODUCT_PROPERTY_OVERRIDES += \
