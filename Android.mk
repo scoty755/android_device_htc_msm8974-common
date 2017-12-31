@@ -52,7 +52,7 @@ $(MODEM_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 
 ALL_DEFAULT_INSTALLED_MODULES += $(MODEM_SYMLINKS)
 
-WCNSS_CONFIG_SYMLINK := $(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_cfg.ini
+WCNSS_CONFIG_SYMLINK := $(TARGET_OUT_VENDOR)/firmware/wlan/prima/WCNSS_qcom_cfg.ini
 $(WCNSS_CONFIG_SYMLINK): $(LOCAL_INSTALLED_MODULE)
 	@echo "WCNSS config link: $@"
 	@mkdir -p $(dir $@)
@@ -60,18 +60,6 @@ $(WCNSS_CONFIG_SYMLINK): $(LOCAL_INSTALLED_MODULE)
 	$(hide) ln -sf /data/misc/wifi/$(notdir $@) $@
 
 ALL_DEFAULT_INSTALLED_MODULES += $(WCNSS_CONFIG_SYMLINK)
-
-WV_IMAGES := \
-    widevine.b00 widevine.b01 widevine.b02 widevine.b03 widevine.mdt
-
-WV_SYMLINKS := $(addprefix $(TARGET_OUT_VENDOR)/firmware/,$(notdir $(WV_IMAGES)))
-$(WV_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
-	@echo "Widevine firmware link: $@"
-	@mkdir -p $(dir $@)
-	@rm -rf $@
-	$(hide) ln -sf /system/etc/firmware/$(notdir $@) $@
-
-ALL_DEFAULT_INSTALLED_MODULES += $(WV_SYMLINKS)
 
 endif
 endif

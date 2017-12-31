@@ -34,6 +34,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Graphics
 PRODUCT_PROPERTY_OVERRIDES += \
     debug.egl.hw=1 \
+    debug.hwui.use_buffer_age=false \
     debug.mdpcomp.logs=0 \
     debug.sf.hw=1 \
     dev.pm.dyn_samplingrate=1 \
@@ -55,7 +56,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
     media.aac_51_output_enabled=true \
-    mm.enable.smoothstreaming=true
+    mm.enable.smoothstreaming=true \
+    persist.media.treble_omx=false
 
 # NFC
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -93,10 +95,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.apm_sim_not_pwdn=1 \
     persist.radio.jbims=1 \
     DEVICE_PROVISIONED=1
-
-# Storage
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sys.sdcardfs=true
 
 # Wifi
 PRODUCT_PROPERTY_OVERRIDES += \
