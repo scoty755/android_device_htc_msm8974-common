@@ -25,10 +25,10 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-import init.qcom.power.rc
-import init.qcom.usb.rc
-import init.target.rc
-import init.carrier.rc
+import /vendor/etc/init/hw/init.qcom.power.rc
+import /vendor/etc/init/hw/init.qcom.usb.rc
+import /vendor/etc/init/hw/init.target.rc
+import /vendor/etc/init/hw/import init.carrier.rc
 
 on early-init
     symlink /data/tombstones /tombstones
@@ -45,15 +45,17 @@ on early-init
     setprop ro.wcnss.serialno ${ro.boot.serialno}
 
 on init
-    export LD_SHIM_LIBS "/system/lib/liblog.so|libshim_log.so:/system/vendor/lib/hw/camera.vendor.msm8974.so|libshim_camera.so:/system/vendor/lib/libril.so|libshim_ril.so:/system/vendor/lib/libril-qc-qmi-1.so|libshim_ril.so"
-
     # Set permissions for persist partition
     mkdir /persist 0771 system system
 
     symlink /sdcard /storage/sdcard0
 
+    # ZRAM setup
+    write /sys/block/zram0/comp_algorithm lz4
+    write /proc/sys/vm/page-cluster 0
+
 on fs
-    mount_all /fstab.qcom
+    mount_all /vendor/etc/fstab.qcom
 
 on post-fs-data
     # Create directories for tombstones
@@ -119,6 +121,12 @@ on post-fs-data
     # Create a folder for SRS to be able to create a usercfg file
     mkdir /data/data/media 0770 media media
 
+    # Create perfd deamon related dirs
+    mkdir /data/misc/perfd 0755 root system
+    chmod 2755 /data/misc/perfd
+    mkdir /data/system/perfd 0770 root system
+    chmod 2770 /data/system/perfd
+
     setprop vold.post_fs_data_done 1
 
 on early-boot
@@ -159,14 +167,6 @@ on boot
     mkdir /dev/socket/qmux_audio 0770 media audio
     mkdir /dev/socket/qmux_bluetooth 0770 bluetooth bluetooth
     mkdir /dev/socket/qmux_gps 0770 gps gps
-
-    # LEDs
-    chown system system /sys/class/leds/green/brightness
-    chown system system /sys/class/leds/green/blink
-    chown system system /sys/class/leds/green/off_timer
-    chown system system /sys/class/leds/amber/brightness
-    chown system system /sys/class/leds/amber/blink
-    chown system system /sys/class/leds/amber/off_timer
 
     # Gestures
     chown system system /sys/class/htc_sensorhub/sensor_hub/gesture_motion
@@ -228,10 +228,6 @@ on boot
     # Load ADSP
     write /sys/kernel/boot_adsp/boot 1
 
-    # Adaptive LMK
-    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
-    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 53059
-
     # Bluetooth MAC address
     chown bluetooth bluetooth /sys/module/htc_bdaddress/parameters/bdaddress
 
@@ -256,16 +252,10 @@ service hvdcp /vendor/bin/hvdcp
     user root
     group root
 
-service irsc_util /vendor/bin/irsc_util "/etc/sec_config"
+service irsc_util /vendor/bin/irsc_util "/vendor/etc/sec_config"
     class main
     user root
     oneshot
-
-service mpdecision /vendor/bin/mpdecision --avg_comp
-    class main
-    user root
-    group root readproc
-    disabled
 
 service netmgrd /vendor/bin/netmgrd
     class core
@@ -274,9 +264,9 @@ service netmgrd /vendor/bin/netmgrd
 
 service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
-    -I/system/etc/wifi/wpa_supplicant_overlay.conf -N \
+    -I/vendor/etc/wifi/wpa_supplicant_overlay.conf -N \
     -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf \
-    -I/system/etc/wifi/p2p_supplicant_overlay.conf \
+    -I/vendor/etc/wifi/p2p_supplicant_overlay.conf \
     -puse_p2p_group_interface=1 \
     -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
     class main
@@ -305,7 +295,7 @@ service rmt_storage /vendor/bin/rmt_storage modem_st1 modem_st2 fsc recovery rad
     group system wakelock
 
 # OSS thermal management
-service thermanager /vendor/bin/thermanager /system/etc/thermanager.xml
+service thermanager /vendor/bin/thermanager /vendor/etc/thermanager.xml
     class late_start
     user system
     group system
@@ -322,6 +312,10 @@ service wcnss-service /vendor/bin/wcnss_service
     oneshot
 
 ## Properties start here
+on property:sys.boot_completed=1
+    # Enable ZRAM on boot_complete
+    swapon_all /vendor/etc/fstab.qcom
+
 on property:bluetooth.hciattach=true
     start hciattach
     setprop bluetooth.status on
